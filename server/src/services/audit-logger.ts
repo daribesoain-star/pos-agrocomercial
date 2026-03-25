@@ -1,0 +1,78 @@
+/**
+ * Audit Logger ‚Äî Registro inmutable de acciones cr√≠ticas
+ *
+ * OWASP A08: Security Logging Failures ‚Üí implementar logging completo
+ * Registra: qui√©n hizo qu√©, cu√°ndo, desde d√≥nde, resultado
+ */
+
+// import { PrismaClient } from "@prisma/client";
+
+export type AuditAction =
+  | "LOGIN"
+  | "LOGIN_FAILED"
+  | "LOGOUT"
+  | "VENTA_CREADA"
+  | "VENTA_ANULADA"
+  | "CAJA_ABIERTA"
+  | "CAJA_CERRADA"
+  | "MOVIMIENTO_INVENTARIO"
+  | "TRASPASO_CREADO"
+  | "MERMA_REGISTRADA"
+  | "PRODUCTO_CREADO"
+  | "PRODUCTO_MODIFICADO"
+  | "PRECIO_MODIFICADO"
+  | "CLIENTE_CREADO"
+  | "DESCUENTO_APLICADO"
+  | "SYNC_ERROR"
+  | "CONFIG_MODIFICADA"
+  | "USUARIO_CREADO"
+  | "USUARIO_MODIFICADO"
+  | "ROL_CAMBIADO"
+  | "ACCESO_DENEGADO";
+
+interface AuditEntry {
+  accion: AuditAction;
+  usuarioId: string;
+  localId: string;
+  ip: string;
+  entidad?: string;        // Tabla/modelo afectado
+  entidadId?: string;      // ID del registro afectado
+  datosAntes?: unknown;    // Snapshot antes del cambio
+  datosDespues?: unknown;  // Snapshot despu√©s del cambio
+  metadata?: Record<string, unknown>;
+}
+
+// const prisma = new PrismaClient();
+
+export async function auditLog(entry: AuditEntry): Promise<void> {
+  try {
+    // TODO: Implementar con Prisma
+    // await prisma.auditLog.create({
+    //   data: {
+    //     accion: entry.action,
+    //     usuarioId: entry.usuarioId,
+    //     localId: entry.localId,
+    //     ip: entry.ip,
+    //     entidad: entry.entidad,
+    //     entidadId: entry.entidadId,
+    //     datosAntes: entry.datosAntes ? JSON.stringify(entry.datosAntes) : null,
+    //     datosDespues: entry.datosDespues ? JSON.stringify(entry.datosDespues) : null,
+    //     metadata: entry.metadata ? JSON.stringify(entry.metadata) : null,
+    //   },
+    // });
+
+    // Log estructurado para ingesta en ELK/Loki
+    console.log(
+      JSON.stringify({
+        level: "audit",
+        timestamp: new Date().toISOString(),
+        ...entry,
+      })
+    );
+  } catch (error) {
+    // El audit log NUNCA debe fallar silenciosamente
+    console.error("[AUDIT CRITICAL] No se pudo registrar evento:", entry.accion, error);
+  }
+}
+
+/»[\à\òH]X›\àXÿ⁄[€ô\»€‹‹X⁄‹ÿ\¬ô^‹ùù[ò›[€à]X›[õ€X[Y\ [ùûNà]Y][ùûJNàõ€€X[à¬àÀ»—Œà[\[Y[ù\à]Xÿ⁄pÏ€àH]õ€ô\»€‹‹X⁄‹€‹ŒÇàÀ»HpÓõ\\»[ù[X⁄[€ô\»[Z\€[»ÿZô\õ¬àÀ»H\ÿ›Y[ù‹»^Ÿ\⁄]õ‹»úôX›Y[ù\¬àÀ»HŸ⁄[à\ŸHT»[ù\›X[\¬àÀ»HXÿŸ\€»ùY\òHH‹ò\ö[¬àÀ»Hõ€[Y[à[õ‹õX[HY\õX\¬àô]\õàò[ŸN¬üB

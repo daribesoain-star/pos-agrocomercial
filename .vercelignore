@@ -1,0 +1,5 @@
+server/
+prisma/
+docker-compose.yml
+Dockerfile
+*.sql

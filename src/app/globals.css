@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* ── Custom theme (Tailwind v4) ── */
+@theme {
+  --color-agro-50: #f0fdf4;
+  --color-agro-100: #dcfce7;
+  --color-agro-200: #bbf7d0;
+  --color-agro-300: #86efac;
+  --color-agro-400: #4ade80;
+  --color-agro-500: #22c55e;
+  --color-agro-600: #16a34a;
+  --color-agro-700: #15803d;
+  --color-agro-800: #166534;
+  --color-agro-900: #14532d;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* ── POS Custom Styles ── */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
